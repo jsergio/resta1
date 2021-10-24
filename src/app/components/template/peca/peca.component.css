@@ -1,0 +1,21 @@
+.tile-image{
+    display: flexbox; 
+    /* padding-top: 8px; */
+    justify-self: center;
+    width: 100%;
+    height: 100%;
+    /* margin-left: 20%;
+    padding-top: 3px;
+    padding-bottom: 10%; */
+    /* margin-bottom: 10%; */
+    /* margin: auto; */
+    /* background-color: #eae0cb; */
+}
+.cl1{
+    border: 0.5px solid red;
+}
+/* mat-card img{
+    object-fit: cover; /*this makes the image in src fit to the size specified below*/
+    /* width: 60px; Here you can use wherever you want to specify the width and also the height of the <img> */
+    /* height: 60px; */
+  /* }  */

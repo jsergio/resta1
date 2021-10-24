@@ -1,0 +1,13 @@
+.conteudo{
+    display: block;
+    /* justify-content: center; */
+    text-align: center;
+    margin: 20%;
+    /* margin-top: 30%; */
+    /* flex-wrap: nowrap; */
+    /* justify-self: end; */
+    /* width: 60%; */
+    /* height: 100%; */
+    background-color:#cce9cc
+    ;
+}

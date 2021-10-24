@@ -1,0 +1,35 @@
+.clapp{
+    display: inline-flexbox;
+    /* display: grid; */
+    padding: 0;
+    margin: 0;
+    /* flex-flow: nowrap; */
+    /* justify-items: center; */
+    width: 100%;
+    /* color: white; */
+    height: 100%;
+    background-color: #f8f7f5;
+    /* background-color: #eae0cb; */
+    /* background-color: rgb(112, 90, 61); */
+    /* border: 3px blue; */
+}
+.tela{
+    /* display: inline-flexbox; */
+    display: inline;
+    /* justify-content: center; */
+    /* vertical-align: center; */
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    -webkit-transition: -webkit-transform 1s;        
+}
+.clplacar{
+    display: flex;
+    /* justify-self: end; */
+    /* justify-content: center; */
+    margin: 0;
+    /* margin-left: 50px; */
+    width: 30%;
+    height: 100%;
+    /* background-color: blue; */
+}

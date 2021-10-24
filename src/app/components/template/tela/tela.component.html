@@ -1,0 +1,45 @@
+<div name='cont'
+ class='content'
+ >
+<span>
+    <!-- <h2 (click)="openFullscreen()">open</h2>
+<h2 (click)="closeFullscreen()">close</h2> -->
+
+    <p>
+        {{indice}}
+    </p>
+</span>
+ <!-- <div class='clprime'>->
+        {{this.srv.objArr[4]|json}}
+        {{borda?"OK":"NOK"}}{{obj.estado}}
+    </div> -->
+<!-- <div *ngFor="let y of [1,2,3,4,5,6,7,8,9];
+let linha=index" class='conteudo'> -->
+<div class="conteudo">
+<mat-grid-list cols=9 
+    md-gutter="5px" rowHeight="45" class="clgeral">
+    <mat-grid-tile *ngFor="let y of this.srv.objArr;
+    let i=index" class='celula'
+    >
+    <div class="entorno" 
+    *ngIf='this.srv.objArr[i].estado<3'
+    (mouseover)='onrover(i)'
+    >
+    <app-peca            
+        [obj]='this.srv.objArr[i]'
+        [ngClass]='{cl1:this.srv.objArr[i].borda}' 
+        (click)="onclick(i)"
+    >
+    </app-peca>
+    </div>
+    </mat-grid-tile>
+    </mat-grid-list>
+</div>
+<!-- </div> -->
+<!-- [linha]='linha' 
+[coluna]='coluna' -->
+</div>
+<!-- [ngClass]={cl1:this.srv.objArr[i].borda} -->
+<!-- (click)="onclick(i)"> -->
+<!-- (mouseover)='onhover(i)' -->
+<!-- (keydown)="onkeydown($event)"   -->
