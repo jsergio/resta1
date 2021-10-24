@@ -105,6 +105,10 @@
           "options": {
             "browserTarget": "resta1:build"
           }
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy",
+          "options": {}
         }
       }
     }
