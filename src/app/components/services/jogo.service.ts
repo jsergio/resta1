@@ -79,7 +79,7 @@ export class JogoService {
   {id: 57, direcao: 'cima'},
   {id: 75, direcao: 'esq'}
 ]
-  pilhafiltrada:any[]=[]
+  // pilhafiltrada:any[]=[]
   
   objant: Peca= {
     id: 0,
@@ -143,80 +143,83 @@ export class JogoService {
     return tmp
   }
 
-  marcavel(obj: Peca): boolean {
+  emcima(obj:Peca):boolean{ //O objeto eh marcavel por cima
+    const ind: number = obj.id
+    const lin: number = Math.floor(ind / 9)
+    const col: number = ind % 9
+
+    return (lin > 1) && (this.objArr[(lin - 1) * 9 + col].estado === 0) 
+    && (this.objArr[(lin - 2) * 9 + col].estado === 2)
+  }
+
+  embaixo(obj:Peca):boolean{ //O objeto eh marcavel por baixo
+    let result:boolean = false
+
+    const ind: number = obj.id
+    const lin: number = Math.floor(ind / 9)
+    const col: number = ind % 9
+    result =(lin < 7) && (this.objArr[(lin + 1) * 9 + col].estado === 0) 
+    && (this.objArr[(lin + 2) * 9 + col].estado === 2)
+   
+    return result
+  }
+
+  aesquerda(obj:Peca):boolean{ //O objeto eh marcavel aesquerda
+    let result:boolean = false
+
+    const ind: number = obj.id
+    const lin: number = Math.floor(ind / 9)
+    const col: number = ind % 9
+  
+    result =(col > 1) && (this.objArr[lin * 9 + (col - 1)].estado === 0) 
+    && (this.objArr[lin * 9 + (col - 2)].estado === 2)
+   
+    return result
+  }
+
+  adireita(obj:Peca):boolean{ //O objeto eh marcavel direita
+    let result:boolean = false
 
     const ind: number = obj.id
     const lin: number = Math.floor(ind / 9)
     const col: number = ind % 9
 
-    const cond_esq: boolean = (col > 1) && (this.objArr[lin * 9 + (col - 1)].estado === 0) && (this.objArr[lin * 9 + (col - 2)].estado === 2)
-    const cond_dir: boolean = (col < 7) && (this.objArr[lin * 9 + (col + 1)].estado === 0) && (this.objArr[lin * 9 + (col + 2)].estado === 2)
-    const cond_baixo: boolean = (lin < 7) && (this.objArr[(lin + 1) * 9 + col].estado === 0) && (this.objArr[(lin + 2) * 9 + col].estado === 2)
-    const cond_cima: boolean = (lin > 1) && (this.objArr[(lin - 1) * 9 + col].estado === 0) && (this.objArr[(lin - 2) * 9 + col].estado === 2)
-
-    let cond: boolean = ((obj.stat === 0) && (obj.estado === 0))
+    result =(col < 7) && (this.objArr[lin * 9 + (col + 1)].estado === 0) 
+    && (this.objArr[lin * 9 + (col + 2)].estado === 2)   
     
-    // console.log('CONDICOES,esq,dir,baixo,cima', cond_esq, cond_dir, cond_baixo, cond_cima)
-    // console.log('COND0', cond, obj, lin, col)
-
-    if (cond) {
-      //  if(col>1)
-      //     if((this.objArr[lin*9+(col-1)].estado==1)&&(this.objArr[lin*9+(col-2)].estado==2))
-      if (cond_esq) {
-        // console.log('CONDESQ', cond_esq, obj)
-        return cond_esq
-      }
-
-      //  cond = cond&&(col>0)&&(this.objArr[lin*9+(col-1)].estado==1)
-      //  if(col<7)
-      //    if(this.objArr[lin*9+(col+1)].estado==1&&this.objArr[lin*9+(col+2)].estado==2)
-      if (cond_dir) {
-        // console.log('CONDDIR', cond_dir, obj)
-        return cond_dir
-      }
-
-      //  cond = cond&&(col<8)&&(this.objArr[lin*9+(col+1)].estado==1)
-      //  if(lin>1)
-      //    if(this.objArr[(lin-1)*9+col].estado==1&&this.objArr[(lin-2)*9+col].estado==2)
-      if (cond_cima) {
-        // console.log('CONDCIMA', cond_cima, obj)
-        return cond_cima
-      }
-
-      //  cond = cond&&(lin>0)&&(this.objArr[(lin-1)*9+col].estado==1)
-      //  if(lin<7)
-      //    if(this.objArr[(lin+1)*9+col].estado==1&&this.objArr[(lin+2)*9+col].estado==2)
-      if (cond_baixo) {
-        // console.log('CONDBAIXO', cond_baixo, obj)
-        return cond
-      }
-
-      //  cond = cond&&(lin<8)&&(this.objArr[(lin+1)*9+col].estado==1)
-    } else {
-      // console.log('NADA')
-      return false
-    }
-    // console.log('CONDFINAL', cond, obj)
-    return false
+    return result
   }
 
+  marcavel(obj: Peca): boolean {
+
+    const result:boolean = this.aesquerda(obj)||this.adireita(obj)||this.emcima(obj)||this.embaixo(obj)
+    const cond: boolean = ((obj.stat === 0) && (obj.estado === 0))
+    
+    return result&&cond
+
+  }
+
+      //  cond = cond&&(lin<8)&&(this.objArr[(lin+1)*9+col].estado==1)
+    // console.log('CONDFINAL', cond, obj)
+
   marca(obj: Peca): void {
-    if (obj.stat === 0) {
-      this.objant.stat = 0
-      this.objant.borda = false
-      obj.stat = 1
+    if(obj.id != this.objant.id){
+        this.objant.stat = 0 //dismarca anterior
+        this.objant.borda = false
+    }
+    if (obj.stat == 0) {
+      obj.stat = 1  //Marca obj
       obj.borda = true
-      // console.log('Marcado ', obj, this.objant)
+      console.log('Marcado ', obj, this.objant)
       this.objant = obj
       // console.log('Marcado ',obj)
       return
-    } else {
-      this.objant.stat = 0
-      this.objant.borda = false
+    } else { //dismarca obj
+
       obj.stat = 0
       obj.borda = false
       // this.objant=obj
-      // console.log('Dismarcado ', obj, this.objant)
+      console.log('Dismarcado ', obj, this.objant)
     }
   }
 
@@ -234,18 +237,21 @@ export class JogoService {
       if(lin1===lin2)
         st='esq'
       else  
-        st='cima'
+        if(col1===col2)
+            st='cima'
       }
      else {
-      if(lin1===lin2)
-        st='dir'
-      else  
-        st='baixo'
+      if(n1>n2)
+          if(lin1===lin2)
+            st='dir'
+          else  
+          if(col1===col2)
+            st='baixo'
     }
     return st  
   }
 
-  poepeca(obj:Peca,i:number){
+  poepeca(obj:Peca,i:number=0):void{
     if(i===1){
       obj.stat = 0
       obj.estado = 0
@@ -255,6 +261,7 @@ export class JogoService {
       obj.estado = 2
       obj.url = this.strvazio
     }
+    return
   }
 
   escolhepilha(i:number){
@@ -268,13 +275,14 @@ export class JogoService {
   }
 
   
-  secapilha(p:any[])
+  secapilha(p:any[]):void
     {
       while(p.length>0)
          p.pop()  
+      return   
     }
 
-  iniciojogo(i:number)
+  iniciojogo(i:number):void
   {
   if(i===1)  
   {
@@ -288,9 +296,10 @@ export class JogoService {
       this.terminou = false
       this.melhor = this.stg.get('melhorresta')        
   }
+  return
 }
 
-pegamelhor(){
+pegamelhor():void{
   let tmp:any[]=this.pilhamelhor
   // if(tmp=this.stg.get("melhorjogo"))
   {  
@@ -300,7 +309,6 @@ pegamelhor(){
       this.pilhasalvas.push(tmp.pop())
      }  
      console.log('Pegou ',this.pilhasalvas)
-     
   }
   // else {  
   //   this.pilhasalvas=[]
@@ -308,6 +316,7 @@ pegamelhor(){
   // // this.copiapilha(this.pilhamelhor,this.pilhasalvas)
   // }
   this.numpecas = 44
+  return
 }
 
 checatermino():void {
@@ -315,7 +324,7 @@ checatermino():void {
   if(this.numpecas < 10)
   {
     this.terminou = !this.veseterminou()
-    console.log('ENTROU0',this.terminou,'MELHOR',this.melhor)
+    console.log('ENTROU',this.terminou,'MELHOR',this.melhor)
     if(this.terminou){
       if(this.numpecas<this.melhor)
       {
@@ -378,10 +387,13 @@ desjoga(i:number){
   }
 
   veseterminou():boolean{
+
     let result = false
     
     const tmp = this.objArr.filter(ele => ele.estado===0)
-    this.pilhafiltrada = tmp
+
+    // this.pilhafiltrada = tmp
+
     tmp.forEach(
       ele => result = this.marcavel(ele) || result 
       )
@@ -390,19 +402,42 @@ desjoga(i:number){
       return result
   }
 
+  distancia(p1:Peca,p2:Peca):number{
+    const l1:number= Math.floor(p1.id/9)
+    const l2:number= Math.floor(p2.id/9)
+    const c1:number=p1.id%9
+    const c2:number=p2.id%9
+    
+    if(l1===l2)
+      return Math.abs(c1-c2)
+    
+    if(c1===c2)
+       return Math.abs(l1-l2)
+    
+    return -1     
+  }
+
   joga(obj: Peca): void {
-    const lin: number = Math.floor(obj.id / 9)
-    const col: number = obj.id % 9
-    const linant: number = Math.floor(this.objant.id / 9)
-    const colant: number = this.objant.id % 9
-    const cond:boolean=(this.objant.stat===1) //obj anterior marcado
+    const ind:number=obj.id
+    const lin: number = Math.floor(ind / 9)
+    const col: number = ind % 9
+    
+    const indant:number=this.objant.id
+    const linant: number = Math.floor(indant / 9)
+    // const colant: number = indant % 9
+
+    const distancia:number= this.distancia(obj,this.objant)
+    
+    const cond:boolean=(this.objant.stat===1)&& (distancia===2) 
+    //obj anterior marcado e distancia ===2 
    
-    if ((cond)&&(obj.estado === 2) && ((lin === linant) || (col === colant))) { //se eh um buraco
+    if (cond && (obj.estado === 2)){ //&& ((lin === linant) || (col === colant))) { 
+      //se eh um buraco e anterior marcado
       
-      const tmp={id:obj.id,direcao:'indefinida'}      
-      if(this.pilhasalvas.length>0)
-        this.secapilha(this.pilhasalvas)
-      tmp.direcao = this.getdir(obj.id,this.objant.id)
+      const tmp : object = {id:obj.id, direcao:this.getdir(obj.id,this.objant.id)}      
+    
+      this.secapilha(this.pilhasalvas)
+    
       this.pilhajogadas.push(tmp)
 
       obj.estado = 0
@@ -415,52 +450,40 @@ desjoga(i:number){
       this.objant.stat=0
 
       if (this.objant.id < obj.id) {
-        if (lin === linant) {
-          this.objArr[lin * 9 + col - 1].estado = 2 //a esquerda
-          this.objArr[lin * 9 + col - 1].url = this.strvazio
-        } else {
-          this.objArr[(lin - 1) * 9 + col].estado = 2 //em cima
-          this.objArr[(lin - 1) * 9 + col].url = this.strvazio
-        }
+            if (lin === linant) {
+              this.objArr[lin * 9 + col - 1].estado = 2 //a esquerda
+              this.objArr[lin * 9 + col - 1].url = this.strvazio
+            } else {
+              this.objArr[(lin - 1) * 9 + col].estado = 2 //em cima
+              this.objArr[(lin - 1) * 9 + col].url = this.strvazio
+            }
+            this.checatermino()
       } else {
-        if (lin === linant) {
-          this.objArr[lin * 9 + col + 1].estado = 2  //a direita
-          this.objArr[lin * 9 + col + 1].url = this.strvazio
-        } else {
-          this.objArr[(lin + 1) * 9 + col].estado = 2 //em baixo
-          this.objArr[(lin + 1) * 9 + col].url = this.strvazio
-        }
-        this.checatermino()
-
-        // if(this.numpecas < 10)
-        //     {
-        //       this.terminou = !this.veseterminou()
-        //       console.log('ENTROU0',this.terminou,'MELHOR',this.melhor)
-        //       if(this.terminou){
-        //         if(this.numpecas<this.melhor)
-        //         {
-        //           console.log('ENTROU1',this.terminou,'MELHOR',this.melhor)
-        //           this.melhor = this.numpecas
-        //           // this.copiapilha(this.pilhasalvas,this.pilhamelhor)
-        //           this.gravapilha(this.pilhajogadas)
-        //         }
-        //       }
-        //     }
+      if(obj.id < this.objant.id){
+          if (lin === linant) {
+            this.objArr[lin * 9 + col + 1].estado = 2  //a direita
+            this.objArr[lin * 9 + col + 1].url = this.strvazio
+            } else {
+            this.objArr[(lin + 1) * 9 + col].estado = 2 //em baixo
+            this.objArr[(lin + 1) * 9 + col].url = this.strvazio
+          }
       }
-    } else {
+        this.checatermino()
+      }
+    } else {  //nao eh um buraco ou anterior nao marcado
       return
     }
   }
 
   jogada(ind: number): void {
+
     const obj: Peca = this.objArr[ind]
-    // if(!this.marcavel(obj))
-    //   return
+
     if (obj.stat === 1) { //se ja foi marcada
       this.marca(obj)  //Dismarca
       return
     }
-    // console.log('Antes ', this.objArr[ind])
+
     if (this.marcavel(obj)) {
       this.marca(obj)
       return
@@ -468,38 +491,5 @@ desjoga(i:number){
       this.joga(obj)
       return
     }
-
-    // if(obj.stat<3){
-    //   {
-    //     if(obj.stat===0)
-    //     {
-    //       obj.stat=1
-    //       obj.borda=true
-    //       this.objant=obj
-    //       console.log('Aqui ',obj)
-    //       return
-    //     }else{
-    //       obj.stat=0
-    //       if(obj.estado===1){
-    //       obj.estado=2
-    //       obj.url=this.strvazio
-    //       } else{
-    //               obj.estado=1
-    //               obj.url=this.strpeca
-    //       }
-    //       this.objant.borda=false
-    //       this.objant.url= this.objant.estado===1?this.strvazio:this.strpeca
-    //       this.objant.stat=0
-    //       this.objant.estado = this.objant.estado===1?2:1
-    //       console.log('Acola ',this.objArr[ind])
-    //       console.log('objAnt ',this.objant)
-    //       return
-    //     }
-    //   }
-    // } else{
-    //   return
-    // }
-
   }
-
 }
