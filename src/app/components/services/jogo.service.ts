@@ -33,8 +33,10 @@ export class JogoService {
 
   pilhajogadas:any[]=[] //[{id:0,direcao:'nenhuma'}]
   pilhasalvas:any[]=[]
-  
+  pilhalocalstore?:any[]
+
   melhor:number=44
+  
 
   pilhamelhor:any[]=[
   {id: 40, direcao: 'esq'},
@@ -92,29 +94,32 @@ export class JogoService {
   constructor(private stg: StorageService) { }
 
   iniciar(){
-    this.melhor = this.stg.get('melhorresta')
+    const tmp = this.stg.get('resta1')
+
+    this.pilhalocalstore =  tmp===null ? [] : tmp
+    
+    console.log('Inicio Melhor',this.pilhalocalstore)
+   
     this.numpecas = 44
+   
     this.objArr = this.criaObjArr()
   }
 
-  gravapilha(p:any):boolean{
-    // const obj={"melhorjogo",p}
-    if(this.stg.remove('melhorjogo')){
-      console.log('MelhorJogo Removido!')
-    }
-    if(this.stg.remove('melhorresta')){
-      console.log('Restamelhor Removido!')
-    }
+  // gravapilha(p:any):boolean{
+  //   // const obj={"melhorjogo",p}
+  //   if(this.stg.remove('resta1')){
+  //     console.log('Restamelhor Removido!')
+  //   }
 
-    if(this.stg.set('melhorjogo',p)){
-      console.log('MelhorJogo',JSON.stringify(p),p.length)
-      if(this.stg.set('melhorresta',this.melhor)){
-        console.log('MelhorResta',this.melhor)
-      }
-      return true
-    }
-    return false
-  }
+  //   if(this.stg.set('resta1',p)){
+  //     console.log('MelhorJogo',JSON.stringify(p),p.length)
+  //     if(this.stg.set('resta1',this.melhor)){
+  //       console.log('MelhorResta',this.melhor)
+  //     }
+  //     return true
+  //   }
+  //   return false
+  // }
 
   criaObjArr(): Peca[] {
 
@@ -210,7 +215,7 @@ export class JogoService {
     if (obj.stat == 0) {
       obj.stat = 1  //Marca obj
       obj.borda = true
-      console.log('Marcado ', obj, this.objant)
+      // console.log('Marcado ', obj, this.objant)
       this.objant = obj
       // console.log('Marcado ',obj)
       return
@@ -294,7 +299,7 @@ export class JogoService {
           this.desjoga(0)
       this.numpecas = 44
       this.terminou = false
-      this.melhor = this.stg.get('melhorresta')        
+      this.pilhalocalstore = this.stg.get('resta1')        
   }
   return
 }
@@ -324,14 +329,20 @@ checatermino():void {
   if(this.numpecas < 10)
   {
     this.terminou = !this.veseterminou()
-    console.log('ENTROU',this.terminou,'MELHOR',this.melhor)
+    console.log('ENTROU0',this.terminou,'MELHOR0',this.melhor)
+    const tam:any[] = this.pilhalocalstore!= null ? this.pilhalocalstore : [] 
+    
+    this.melhor = 44 - tam.length
+    
     if(this.terminou){
       if(this.numpecas<this.melhor)
       {
-        console.log('ENTROU1',this.terminou,'MELHOR',this.melhor)
-        this.melhor = this.numpecas
+        console.log('ENTROU1',this.terminou,'MELHOR1',this.melhor)
+        
+        // this.melhor = this.numpecas
         // this.copiapilha(this.pilhasalvas,this.pilhamelhor)
-        this.gravapilha(this.pilhajogadas)
+        this.stg.pilha = this.pilhajogadas
+        this.stg.salva()
       }
     }
   }

@@ -3,9 +3,13 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root'
 })
+
 export class StorageService {
 
   private storage: Storage;
+
+  pilha:any[]=[]
+
 
   constructor() {
     this.storage = window.localStorage;
@@ -46,5 +50,9 @@ export class StorageService {
     }
     return false;
   }
-
+  salva():boolean{
+   this.remove('resta1')
+   console.log('Salvou',this.pilha)
+   return this.set('resta1',this.pilha)
+  }
 }

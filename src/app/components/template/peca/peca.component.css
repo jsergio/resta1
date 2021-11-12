@@ -14,6 +14,9 @@
 .cl1{
     border: 0.2em solid red;
 }
+.cl2{
+    border: 0.2em solid blue;
+}
 /* mat-card img{
     object-fit: cover; /*this makes the image in src fit to the size specified below*/
     /* width: 60px; Here you can use wherever you want to specify the width and also the height of the <img> */

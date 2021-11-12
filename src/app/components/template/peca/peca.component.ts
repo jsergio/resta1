@@ -24,7 +24,8 @@ export class PecaComponent implements OnInit {
       estado:0,
       borda:false
     }
-  
+    
+  objazul:boolean=false
   // borda:boolean=false
   est:number[]=[]
   
@@ -41,6 +42,16 @@ export class PecaComponent implements OnInit {
   //   // this.borda=!this.borda
   //   // alert(tmp)
   // }
+
+onhover():void{
+  if(this.srv.marcavel(this.obj))
+     this.objazul = true
+}
+onleave():void{
+  this.objazul = false
+ }
+
+
   ngOnInit(): void {
     // const linha=Math.floor(this.obj.id / 9)
     // const coluna= this.obj.id%9
