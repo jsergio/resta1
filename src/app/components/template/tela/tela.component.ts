@@ -55,6 +55,10 @@ onkeydown(e:KeyboardEvent){
     // console.log('Aqui')
     this.srv.pegamelhor()    
   }
+  if(e.code==='KeyM')
+  {
+    this.srv.pegalocalstorage()
+  }
   if(e.code==='Digit1')
   {
      console.log('Muito Bom',this.srv.pilhajogadas)

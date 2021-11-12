@@ -36,6 +36,7 @@ export class JogoService {
   pilhalocalstore?:any[]
 
   melhor:number=44
+  pegoupilhamelhor:boolean=false
   
 
   pilhamelhor:any[]=[
@@ -95,7 +96,7 @@ export class JogoService {
 
   iniciar(){
     const tmp = this.stg.get('resta1')
-
+    
     this.pilhalocalstore =  tmp===null ? [] : tmp
     
     console.log('Inicio Melhor',this.pilhalocalstore)
@@ -304,10 +305,24 @@ export class JogoService {
   return
 }
 
+pegalocalstorage():void{
+  const tmp:any[] = this.stg.get('resta1')!=null?this.stg.get('resta1'):[]
+  if(tmp!=[]){
+    this.pilhajogadas=[]
+    this.pilhasalvas=[]
+    while(tmp.length>0)
+    {
+     this.pilhasalvas.push(tmp.pop())
+    }  
+    console.log('Pegou Local Storage',this.pilhasalvas)    
+  }
+}
+
 pegamelhor():void{
   let tmp:any[]=this.pilhamelhor
   // if(tmp=this.stg.get("melhorjogo"))
-  {  
+  { 
+     this.pilhajogadas=[]
      this.pilhasalvas=[]
      while(tmp.length>0)
      {
@@ -321,6 +336,7 @@ pegamelhor():void{
   // // this.copiapilha(this.pilhamelhor,this.pilhasalvas)
   // }
   this.numpecas = 44
+  this.pegoupilhamelhor = true 
   return
 }
 
@@ -335,7 +351,7 @@ checatermino():void {
     this.melhor = 44 - tam.length
     
     if(this.terminou){
-      if(this.numpecas<this.melhor)
+      if((this.numpecas<this.melhor) && !this.pegoupilhamelhor)
       {
         console.log('ENTROU1',this.terminou,'MELHOR1',this.melhor)
         
