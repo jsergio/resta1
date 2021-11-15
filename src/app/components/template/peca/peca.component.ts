@@ -37,39 +37,21 @@ export class PecaComponent implements OnInit {
   
   constructor(public srv:JogoService) { }
  
-  // onClick(){
-  //   const tmp:boolean=this.obj.borda
-  //   // this.borda=!this.borda
-  //   // alert(tmp)
-  // }
+  onclick(){
+    if(this.srv.marcavel(this.obj))
+        this.objazul = true
+    // this.borda=!this.borda
+    // alert(tmp)
+  }
 
 onhover():void{
   if(this.srv.marcavel(this.obj))
      this.objazul = true
 }
 onleave():void{
-  this.objazul = false
+  // if(this.srv.marcavel(this.obj))
+      this.objazul = false
  }
 
-
-  ngOnInit(): void {
-    // const linha=Math.floor(this.obj.id / 9)
-    // const coluna= this.obj.id%9
-    // console.log(linha,coluna)
-    // const condicao:boolean=(linha<3 || linha>5)&&(coluna<3||coluna>5)
-
-    // if(condicao)
-    // {
-    //   this.est[9*linha+coluna] = 3
-    //   this.srv.objArr[9*linha+coluna].estado=3
-    //   // console.log("OK ",this.obj.estado)
-    // } else {
-    //   // this.obj.estado=1
-    //   this.est[9*linha+coluna] = 1
-    //   this.srv.objArr[9*linha+coluna].estado=1
-    //   // console.log("NOK ",this.obj.estado)
-    // }
-    // // this.obj.estado=3
-      // console.log("UUU ",this.est)
-  }
+  ngOnInit(): void {}
 }

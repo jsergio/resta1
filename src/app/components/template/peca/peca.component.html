@@ -3,9 +3,10 @@
    alt="Falhou" 
    width="10%"
     class="tile-image"
-    [ngClass]="{cl1:obj.borda,cl2:objazul}"
+    [ngClass]="{cl1:obj.borda,cl2:(!obj.borda)&&objazul}"
     (mouseover)="onhover()"
     (mouseleave)="onleave()"
+    (click) = "onclick()"
    >
    <!-- (click)="onClick()" -->
    <!-- "cartaobj.cartaverso ? srv.cartacapa : cartaobj.cartaface"  -->

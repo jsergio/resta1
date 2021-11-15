@@ -1,6 +1,5 @@
 import { StorageService } from './storage.service';
 import { Injectable } from '@angular/core';
-// import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 export interface Peca {
   id: number,
@@ -10,8 +9,14 @@ export interface Peca {
   borda: boolean
 }
 
+export interface Jogada{
+  id:number,
+  direcao:string
+}
+
+
 /*
-estado == 1 peca
+estado == 0 peca
 estado == 3 sem imgem
 estado == 2 buraco
 */
@@ -31,15 +36,14 @@ export class JogoService {
 
   objArr: Peca[] = [] //this.criaObjArr()
 
-  pilhajogadas:any[]=[] //[{id:0,direcao:'nenhuma'}]
-  pilhasalvas:any[]=[]
-  pilhalocalstore?:any[]
+  pilhajogadas:Jogada[]=[] //[{id:0,direcao:'nenhuma'}]
+  pilhasalvas:Jogada[]=[]
+  pilhalocalstore?:Jogada[]
 
   melhor:number=44
   pegoupilhamelhor:boolean=false
-  
 
-  pilhamelhor:any[]=[
+  pilhamelhor:Jogada[]=[
   {id: 40, direcao: 'esq'},
   {id: 41, direcao: 'baixo'},
   {id: 23, direcao: 'baixo'},
@@ -82,8 +86,6 @@ export class JogoService {
   {id: 57, direcao: 'cima'},
   {id: 75, direcao: 'esq'}
 ]
-  // pilhafiltrada:any[]=[]
-  
   objant: Peca= {
     id: 0,
     url: '',
@@ -95,46 +97,32 @@ export class JogoService {
   constructor(private stg: StorageService) { }
 
   iniciar(){
-    const tmp = this.stg.get('resta1')
+    const tmp:Jogada[] = this.stg.get('resta1')
     
     this.pilhalocalstore =  tmp===null ? [] : tmp
     
-    console.log('Inicio Melhor',this.pilhalocalstore)
+    // console.log('Inicio Melhor',this.pilhalocalstore)
    
     this.numpecas = 44
    
     this.objArr = this.criaObjArr()
   }
 
-  // gravapilha(p:any):boolean{
-  //   // const obj={"melhorjogo",p}
-  //   if(this.stg.remove('resta1')){
-  //     console.log('Restamelhor Removido!')
-  //   }
-
-  //   if(this.stg.set('resta1',p)){
-  //     console.log('MelhorJogo',JSON.stringify(p),p.length)
-  //     if(this.stg.set('resta1',this.melhor)){
-  //       console.log('MelhorResta',this.melhor)
-  //     }
-  //     return true
-  //   }
-  //   return false
-  // }
-
   criaObjArr(): Peca[] {
 
     const tmp: Peca[] = []
+
     let lin: number = 0
     let col: number = 0
     let cond: boolean = false
+
     for (let i = 0; i < 81; i++) {
       lin = Math.floor(i / 9)
       col = i % 9
       cond = (lin < 3 || lin > 5) && (col < 3 || col > 5)
       const obj: Peca = {
         id: i,
-        url: this.strpeca,
+        url: cond ? '' : this.strpeca,
         stat: 0,
         estado: cond ? 3 : 0,
         borda: false
@@ -199,9 +187,9 @@ export class JogoService {
   marcavel(obj: Peca): boolean {
 
     const result:boolean = this.aesquerda(obj)||this.adireita(obj)||this.emcima(obj)||this.embaixo(obj)
-    const cond: boolean = ((obj.stat === 0) && (obj.estado === 0))
+    // const cond: boolean = ((obj.stat === 0) && (obj.estado === 0))
     
-    return result&&cond
+    return result //&&cond
 
   }
 
@@ -225,7 +213,7 @@ export class JogoService {
       obj.stat = 0
       obj.borda = false
       // this.objant=obj
-      console.log('Dismarcado ', obj, this.objant)
+      // console.log('Dismarcado ', obj, this.objant)
     }
   }
 
@@ -281,7 +269,7 @@ export class JogoService {
   }
 
   
-  secapilha(p:any[]):void
+  secapilha(p:Jogada[]):void
     {
       while(p.length>0)
          p.pop()  
@@ -300,43 +288,42 @@ export class JogoService {
           this.desjoga(0)
       this.numpecas = 44
       this.terminou = false
-      this.pilhalocalstore = this.stg.get('resta1')        
+      const tmp:Jogada[] = this.stg.get('resta1')
+      this.pilhalocalstore = tmp===null ? [] : tmp
   }
   return
 }
 
 pegalocalstorage():void{
-  const tmp:any[] = this.stg.get('resta1')!=null?this.stg.get('resta1'):[]
+
+  const tmp:Jogada[] = this.stg.get('resta1')!=null?this.stg.get('resta1'):[]
   if(tmp!=[]){
     this.pilhajogadas=[]
     this.pilhasalvas=[]
     while(tmp.length>0)
     {
-     this.pilhasalvas.push(tmp.pop())
+      const tt = tmp.pop()
+      if(typeof(tt)!= "undefined")
+          this.pilhasalvas.push(tt)
     }  
-    console.log('Pegou Local Storage',this.pilhasalvas)    
+    // console.log('Pegou Local Storage',this.pilhasalvas)    
   }
 }
 
 pegamelhor():void{
-  let tmp:any[]=this.pilhamelhor
-  // if(tmp=this.stg.get("melhorjogo"))
-  { 
-     this.pilhajogadas=[]
-     this.pilhasalvas=[]
-     while(tmp.length>0)
-     {
-      this.pilhasalvas.push(tmp.pop())
-     }  
-     console.log('Pegou ',this.pilhasalvas)
+  const tmp:Jogada[]=this.pilhamelhor || []
+   
+  this.pilhajogadas=[]
+  this.pilhasalvas=[]
+  // if(typeof(tmp)!="undefined" && tmp != [])
+  while(tmp!=[] && tmp.length>0){
+    const tt = tmp.pop()//||{id:-1,direcao:'indefinida'}
+    if(typeof(tt)!= "undefined")
+       this.pilhasalvas.push(tt)
   }
-  // else {  
-  //   this.pilhasalvas=[]
-  //   console.log('Problemas ')
-  // // this.copiapilha(this.pilhamelhor,this.pilhasalvas)
-  // }
   this.numpecas = 44
   this.pegoupilhamelhor = true 
+    //  console.log('Pegou ',this.pilhasalvas)
   return
 }
 
@@ -345,18 +332,15 @@ checatermino():void {
   if(this.numpecas < 10)
   {
     this.terminou = !this.veseterminou()
-    console.log('ENTROU0',this.terminou,'MELHOR0',this.melhor)
-    const tam:any[] = this.pilhalocalstore!= null ? this.pilhalocalstore : [] 
+    // console.log('ENTROU0',this.terminou,'MELHOR0',this.melhor)
+    const tam:Jogada[] = this.pilhalocalstore!= null ? this.pilhalocalstore : [] 
     
     this.melhor = 44 - tam.length
     
     if(this.terminou){
       if((this.numpecas<this.melhor) && !this.pegoupilhamelhor)
       {
-        console.log('ENTROU1',this.terminou,'MELHOR1',this.melhor)
-        
-        // this.melhor = this.numpecas
-        // this.copiapilha(this.pilhasalvas,this.pilhamelhor)
+        // console.log('ENTROU1',this.terminou,'MELHOR1',this.melhor)
         this.stg.pilha = this.pilhajogadas
         this.stg.salva()
       }
@@ -372,7 +356,9 @@ desjoga(i:number){
     if(p1.length==0)
         return
      else{
-       const tmp=p1.pop()
+       const tmp= p1.pop()||{id:-1,direcao:'indefinida'}
+      //  const tmp = isDefined(tmp1)?tmp1:{id:-1,direcao:'indefinida'}
+      //  if(isDefined(tmp))
        p2.push(tmp)
        const obj= this.objArr[tmp.id]
        this.poepeca(obj,i)
@@ -403,6 +389,8 @@ desjoga(i:number){
                     this.poepeca(this.objArr[tmp.id-18],1-i)
                     // this.marca(this.objant)
                     break   
+        default:
+                    break            
        }
        if(i==0)
           this.numpecas++
@@ -424,8 +412,7 @@ desjoga(i:number){
     tmp.forEach(
       ele => result = this.marcavel(ele) || result 
       )
-      console.log('FALTAM AGORA',tmp,'TAMANHO ',tmp.length,'Result',result)
-    
+      // console.log('FALTAM AGORA',tmp,'TAMANHO ',tmp.length,'Result',result)
       return result
   }
 
@@ -461,7 +448,7 @@ desjoga(i:number){
     if (cond && (obj.estado === 2)){ //&& ((lin === linant) || (col === colant))) { 
       //se eh um buraco e anterior marcado
       
-      const tmp : object = {id:obj.id, direcao:this.getdir(obj.id,this.objant.id)}      
+      const tmp : Jogada = {id:obj.id, direcao:this.getdir(obj.id,this.objant.id)}      
     
       this.secapilha(this.pilhasalvas)
     
