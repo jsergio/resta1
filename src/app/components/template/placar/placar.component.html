@@ -1,11 +1,23 @@
 <div class="conteudo">
-    <h1>
-        Bem Vindo ao jogo Resta 1
-    </h1>
-    <h1>
-        Restam: "{{this.srv.numpecas}}"
-    </h1>
-    <h1 *ngIf="this.srv.terminou">
-        Terminou
-    </h1>
+    <div id="ini" *ngIf = "this.srv.numpecas===44">
+        <h1>
+            Bem Vindo ao jogo Resta 1
+        </h1>
+    </div>
+    <div *ngIf = "this.srv.numpecas != 44">
+        <h1>
+            Restam&#160;:&#160; {{this.srv.numpecas}}&#160;pe&ccedil;as
+        </h1>
+    </div>
+
+    <div *ngIf= "this.srv.terminou">
+        <h1>Parab&eacute;ns, voc&ecirc; terminou com sucesso!</h1>
+    </div>
+    <div *ngIf="this.srv.numpecas > this.srv.melhor">
+      <h2 >  
+        Existe uma partida gravada nesse navegador 
+        restando {{this.srv.melhor}} pe&ccedil;as
+       </h2>
+    </div>
+
 </div>

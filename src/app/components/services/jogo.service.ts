@@ -33,6 +33,7 @@ export class JogoService {
   strpeca: string = 'assets/img/peca1C.png'
   strvazio: string = 'assets/img/pecax2.png'
   terminou:boolean=false
+  iniciou:boolean=false
 
   objArr: Peca[] = [] //this.criaObjArr()
 
@@ -40,7 +41,7 @@ export class JogoService {
   pilhasalvas:Jogada[]=[]
   pilhalocalstore?:Jogada[]
 
-  melhor:number=44
+  melhor:number=0
   pegoupilhamelhor:boolean=false
 
   pilhamelhor:Jogada[]=[
@@ -101,11 +102,13 @@ export class JogoService {
     
     this.pilhalocalstore =  tmp===null ? [] : tmp
     
+    this.melhor = 44 - tmp.length
     // console.log('Inicio Melhor',this.pilhalocalstore)
    
     this.numpecas = 44
    
     this.objArr = this.criaObjArr()
+    this.iniciou = true
   }
 
   criaObjArr(): Peca[] {
@@ -187,9 +190,9 @@ export class JogoService {
   marcavel(obj: Peca): boolean {
 
     const result:boolean = this.aesquerda(obj)||this.adireita(obj)||this.emcima(obj)||this.embaixo(obj)
-    // const cond: boolean = ((obj.stat === 0) && (obj.estado === 0))
+    const cond: boolean = ((obj.stat === 0) && (obj.estado === 0))
     
-    return result //&&cond
+    return result&&cond
 
   }
 
@@ -471,7 +474,7 @@ desjoga(i:number){
               this.objArr[(lin - 1) * 9 + col].estado = 2 //em cima
               this.objArr[(lin - 1) * 9 + col].url = this.strvazio
             }
-            this.checatermino()
+            // this.checatermino()
       } else {
       if(obj.id < this.objant.id){
           if (lin === linant) {
@@ -482,8 +485,9 @@ desjoga(i:number){
             this.objArr[(lin + 1) * 9 + col].url = this.strvazio
           }
       }
-        this.checatermino()
+        // this.checatermino()
       }
+      this.checatermino()
     } else {  //nao eh um buraco ou anterior nao marcado
       return
     }
