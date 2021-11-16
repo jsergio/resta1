@@ -98,6 +98,10 @@ export class JogoService {
   constructor(private stg: StorageService) { }
 
   iniciar(){
+
+    this.objArr = this.criaObjArr()
+    this.iniciou = true
+    
     const tmp:Jogada[] = this.stg.get('resta1')||[]
     
     this.pilhalocalstore =  tmp===null ? [] : tmp
@@ -109,8 +113,7 @@ export class JogoService {
    
     this.numpecas = 44
    
-    this.objArr = this.criaObjArr()
-    this.iniciou = true
+
   }
 
   criaObjArr(): Peca[] {
