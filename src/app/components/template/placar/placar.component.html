@@ -13,11 +13,12 @@
     <div *ngIf= "this.srv.terminou">
         <h1>Parab&eacute;ns, voc&ecirc; terminou com sucesso!</h1>
     </div>
-    <div *ngIf="this.srv.terminou && this.srv.numpecas > this.srv.melhor">
-      <h2>  
+    
+    <div *ngIf="this.srv.terminou">
+      <h2 *ngIf="this.srv.numpecas > this.srv.melhor">  
         Existe uma partida gravada nesse navegador 
         restando apenas {{this.srv.melhor}} pe&ccedil;as
-       </h2>
+      </h2>
     </div>
 
 </div>

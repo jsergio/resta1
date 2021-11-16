@@ -102,6 +102,8 @@ export class JogoService {
     
     this.pilhalocalstore =  tmp===null ? [] : tmp
     
+    console.log('Pilha Local Store',this.pilhalocalstore)
+
     this.melhor = 44 - tmp.length
     // console.log('Inicio Melhor',this.pilhalocalstore)
    
@@ -141,12 +143,15 @@ export class JogoService {
   }
 
   emcima(obj:Peca):boolean{ //O objeto eh marcavel por cima
+    let result:boolean=false
+
     const ind: number = obj.id
     const lin: number = Math.floor(ind / 9)
     const col: number = ind % 9
-
-    return (lin > 1) && (this.objArr[(lin - 1) * 9 + col].estado === 0) 
-    && (this.objArr[(lin - 2) * 9 + col].estado === 2)
+    
+    result =(lin > 1) && (this.objArr[(lin - 1) * 9 + col].estado === 0) 
+    && (this.objArr[(lin - 2) * 9 + col].estado === 2) 
+    return result
   }
 
   embaixo(obj:Peca):boolean{ //O objeto eh marcavel por baixo
@@ -193,7 +198,6 @@ export class JogoService {
     const cond: boolean = ((obj.stat === 0) && (obj.estado === 0))
     
     return result&&cond
-
   }
 
       //  cond = cond&&(lin<8)&&(this.objArr[(lin+1)*9+col].estado==1)
@@ -300,7 +304,7 @@ export class JogoService {
 pegalocalstorage():void{
 
   const tmp:Jogada[] = this.stg.get('resta1')!=null?this.stg.get('resta1'):[]
-  if(tmp!=[]){
+  if(tmp.length>0){
     this.pilhajogadas=[]
     this.pilhasalvas=[]
     while(tmp.length>0)
@@ -314,12 +318,12 @@ pegalocalstorage():void{
 }
 
 pegamelhor():void{
-  const tmp:Jogada[]=this.pilhamelhor || []
+  const tmp:Jogada[]=this.pilhamelhor
    
   this.pilhajogadas=[]
   this.pilhasalvas=[]
   // if(typeof(tmp)!="undefined" && tmp != [])
-  while(tmp!=[] && tmp.length>0){
+  while(tmp.length>0){
     const tt = tmp.pop()//||{id:-1,direcao:'indefinida'}
     if(typeof(tt)!= "undefined")
        this.pilhasalvas.push(tt)
