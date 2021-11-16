@@ -98,7 +98,7 @@ export class JogoService {
   constructor(private stg: StorageService) { }
 
   iniciar(){
-    const tmp:Jogada[] = this.stg.get('resta1')
+    const tmp:Jogada[] = this.stg.get('resta1')||[]
     
     this.pilhalocalstore =  tmp===null ? [] : tmp
     
