@@ -101,7 +101,8 @@ export class JogoService {
 
     this.objArr = this.criaObjArr()
     this.iniciou = true
-    
+    this.numpecas = 44
+
     const tmp:Jogada[] = this.stg.get('resta1')||[]
     
     this.pilhalocalstore =  tmp===null ? [] : tmp
@@ -110,10 +111,6 @@ export class JogoService {
 
     this.melhor = 44 - tmp.length
     // console.log('Inicio Melhor',this.pilhalocalstore)
-   
-    this.numpecas = 44
-   
-
   }
 
   criaObjArr(): Peca[] {
