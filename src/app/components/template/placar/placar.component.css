@@ -2,7 +2,7 @@
     display: block;
     /* justify-content: center; */
     text-align: center;
-    margin: 20%;
+    margin: 10%;
     /* margin-top: 30%; */
     /* flex-wrap: nowrap; */
     /* justify-self: end; */
@@ -10,4 +10,14 @@
     /* height: 100%; */
     background-color:#cce9cc
     ;
+
+}
+.ini{
+    color: blue;
+}
+.fin{
+    color: blue;
+}
+#msg{
+    color: red;
 }

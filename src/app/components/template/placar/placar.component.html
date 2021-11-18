@@ -1,23 +1,28 @@
 <div class="conteudo">
-    <div id="ini" *ngIf = "this.srv.numpecas===44">
+    <div class="ini" *ngIf = "this.srv.numpecas===44">
         <h1>
             Bem Vindo ao jogo Resta 1
         </h1>
     </div>
-    <div *ngIf = "this.srv.numpecas != 44">
+    <div class='ini' *ngIf = "!this.srv.terminou && this.srv.numpecas != 44">
         <h1>
-            Restam&#160;:&#160; {{this.srv.numpecas}}&#160;pe&ccedil;as
+         Restam ainda:
+            {{this.srv.numpecas}}&#160;pe&ccedil;as
         </h1>
     </div>
 
-    <div *ngIf= "this.srv.terminou">
-        <h1>Parab&eacute;ns, voc&ecirc; terminou com sucesso!</h1>
-    </div>
+    <div class='fin' *ngIf= "this.srv.terminou">
+        <h1>Parab&eacute;ns, voc&ecirc; terminou com sucesso!
+            <br/> Restaram apenas:
+            {{this.srv.numpecas}}&#160;pe&ccedil;as
+        </h1>
+    <!-- </div> -->
 
-    <div *ngIf="this.srv.terminou">
-      <br/><br/>
-      <h2 *ngIf="this.srv.numpecas > this.srv.melhor">  
-        Existe uma partida gravada nesse navegador 
+    <!-- <div *ngIf="this.srv.terminou"> -->
+      <br/>
+      <h2 id='msg' style="color: red;"  *ngIf="this.srv.numpecas > this.srv.melhor">  
+        Existe uma partida gravada nesse navegador,
+        em  {{this.stg.formatadata(this.stg.agora)}},
         restando apenas {{this.srv.melhor}} pe&ccedil;as
       </h2>
     </div>

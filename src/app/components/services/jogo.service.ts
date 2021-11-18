@@ -95,7 +95,7 @@ export class JogoService {
     borda: false
   } //this.objArr[0]
 
-  constructor(private stg: StorageService) { }
+  constructor(public stg: StorageService) { }
 
   iniciar(){
 
@@ -103,13 +103,16 @@ export class JogoService {
     this.iniciou = true
     this.numpecas = 44
 
-    const tmp:Jogada[] = this.stg.get('resta1')||[]
+    this.stg.pegastorage()
+    this.pilhalocalstore=this.stg.pilhasalva
+    // const tmp:Jogada[] = this.stg.pilhasalva
     
-    this.pilhalocalstore =  tmp===null ? [] : tmp
-    
-    console.log('Pilha Local Store',this.pilhalocalstore)
+    // this.pilhalocalstore =  tmp
+    console.log('EM SRV \nPilha Local Store\n',this.pilhalocalstore)
 
-    this.melhor = 44 - tmp.length
+    this.melhor = 44 - this.pilhalocalstore.length
+    
+    console.log('MLHOR\n',this.melhor)
     // console.log('Inicio Melhor',this.pilhalocalstore)
   }
 
@@ -295,15 +298,16 @@ export class JogoService {
           this.desjoga(0)
       this.numpecas = 44
       this.terminou = false
-      const tmp:Jogada[] = this.stg.get('resta1')
-      this.pilhalocalstore = tmp===null ? [] : tmp
+      this.stg.pegastorage()
+      // const tmp:Jogada[] = this.stg.pilhasalva
+      this.pilhalocalstore = this.stg.pilhasalva//tmp===null ? [] : tmp
   }
   return
 }
 
 pegalocalstorage():void{
-
-  const tmp:Jogada[] = this.stg.get('resta1')!=null?this.stg.get('resta1'):[]
+  this.stg.pegastorage()
+  const tmp:Jogada[] = this.stg.pilhasalva
   if(tmp.length>0){
     this.pilhajogadas=[]
     this.pilhasalvas=[]
@@ -318,8 +322,9 @@ pegalocalstorage():void{
 }
 
 pegamelhor():void{
+  //Quando tecla o digito zero
   const tmp:Jogada[]=this.pilhamelhor
-   
+   console.log("PEGOU MELHOR\n",tmp)
   this.pilhajogadas=[]
   this.pilhasalvas=[]
   // if(typeof(tmp)!="undefined" && tmp != [])
@@ -340,11 +345,11 @@ checatermino():void {
   {
     this.terminou = !this.veseterminou()
     // console.log('ENTROU0',this.terminou,'MELHOR0',this.melhor)
-    const tam:Jogada[] = this.pilhalocalstore!= null ? this.pilhalocalstore : [] 
-    
-    this.melhor = 44 - tam.length
     
     if(this.terminou){
+      // const tam:Jogada[] = this.pilhalocalstore!= null ? this.pilhalocalstore : [] 
+      // this.melhor = 44 - tam.length
+      console.log('PECAS\n',this.numpecas,'\nMELHOR\n',this.melhor)
       if((this.numpecas<this.melhor) && !this.pegoupilhamelhor)
       {
         // console.log('ENTROU1',this.terminou,'MELHOR1',this.melhor)
@@ -491,6 +496,7 @@ desjoga(i:number){
       }
         // this.checatermino()
       }
+      // console.log('No JOGO',this.pilhalocalstore)
       this.checatermino()
     } else {  //nao eh um buraco ou anterior nao marcado
       return

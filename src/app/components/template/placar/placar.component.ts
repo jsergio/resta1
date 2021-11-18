@@ -1,3 +1,4 @@
+import { StorageService } from './../../services/storage.service';
 import { JogoService } from './../../services/jogo.service';
 import { Component, OnInit } from '@angular/core';
 
@@ -8,7 +9,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PlacarComponent implements OnInit {
 
-  constructor(public srv:JogoService) { }
+  constructor(public srv:JogoService,
+    public stg:StorageService) { }
 
   ngOnInit(): void {
   }
