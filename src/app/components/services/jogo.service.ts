@@ -102,7 +102,7 @@ export class JogoService {
     this.objArr = this.criaObjArr()
     this.iniciou = true
     this.numpecas = 44
-
+    
     this.stg.pegastorage()
     this.pilhalocalstore=this.stg.pilhasalva
     // const tmp:Jogada[] = this.stg.pilhasalva
