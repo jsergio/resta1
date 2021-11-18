@@ -110,7 +110,7 @@ export class JogoService {
     // this.pilhalocalstore =  tmp
     console.log('EM SRV \nPilha Local Store\n',this.pilhalocalstore)
 
-    this.melhor = 44 - this.pilhalocalstore.length
+    this.melhor = 44 - this.stg.pilhasalva.length
     
     console.log('MLHOR\n',this.melhor)
     // console.log('Inicio Melhor',this.pilhalocalstore)
