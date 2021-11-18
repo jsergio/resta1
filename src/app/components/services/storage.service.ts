@@ -67,7 +67,7 @@ export class StorageService {
       this.pilhasalva = []
       this.agora=0
     } else {
-      this.pilhasalva= tmp===null?[]:tmp
+      this.pilhasalva= tmp===null?[]:tmp.pilha
       this.agora=tmp===null?0:tmp.data
     }
     console.log('EM STG\n',this.pilhasalva)
