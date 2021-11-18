@@ -62,8 +62,10 @@ export class StorageService {
   }
   
   pegastorage():void{
-    const tmp=this.get('resta1')
-    this.pilhasalva= tmp===null?[]:tmp.pilha
+    let tmp=this.get('resta1')
+    if(typeof(tmp)=="undefined")
+      tmp = []
+    this.pilhasalva= tmp
     console.log('EM STG',this.pilhasalva)
     // const tt=this.get('resta1')
     this.agora=tmp===null?-1:tmp.data
